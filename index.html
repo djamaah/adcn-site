@@ -226,8 +226,9 @@ footer{background:var(--navy);color:rgba(255,255,255,.7);padding:4rem 0 0}
 }
 
 /* ── SCROLL ANIMATIONS ── */
-.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
-.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal{opacity:0;transform:translateY(24px);animation:revealFallback .8s ease forwards;animation-delay:.2s}
+.reveal.visible{opacity:1;transform:translateY(0);animation:none}
+@keyframes revealFallback{to{opacity:1;transform:translateY(0)}}
 </style>
 </head>
 <body>
@@ -261,7 +262,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.7);padding:4rem 0 0}
     <div class="hero-content">
       <div class="hero-badge"><span class="dot"></span>Région de la Capitale nationale</div>
       <h1 class="hero-title">Bienvenue dans<br>votre <span class="accent">communauté.</span></h1>
-      <div class="hero-arabic">أهلا وسهلا — Arcib — Soo dhawoow</div>
+      <div class="hero-arabic">أهلا وسهلا — Soo dhawoow</div>
       <p class="hero-desc">
         L'ADCN rassemble la communauté djiboutienne d'Ottawa-Gatineau. Ensemble, nous célébrons notre culture, accompagnons les nouveaux arrivants et bâtissons un avenir solidaire.
       </p>
@@ -489,7 +490,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.7);padding:4rem 0 0}
       <div class="contact-card reveal">
         <div class="c-icon">✉️</div>
         <h4>Courriel</h4>
-        <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2a43444c456a4b4e4944074b4e444904494b">[email&#160;protected]</a></p>
+        <p>info@adcn-adnc.ca</p>
       </div>
       <div class="contact-card reveal">
         <div class="c-icon">📞</div>
@@ -528,7 +529,29 @@ footer{background:var(--navy);color:rgba(255,255,255,.7);padding:4rem 0 0}
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-// Scroll reveal
-const obs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:.15});
-do
+<script>
+// Scroll reveal with fallback
+try {
+  const obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '50px' });
+  document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+} catch(err) {
+  document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('visible'); });
+}
+// Fallback: guarantee visibility after 2s
+setTimeout(function() {
+  document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('visible'); });
+}, 2000);
+// Nav shadow on scroll
+window.addEventListener('scroll', function() {
+  document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 20);
+});
+</script>
+</body>
+</html>
