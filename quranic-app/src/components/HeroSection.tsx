@@ -2,181 +2,157 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Headphones, ChevronDown, Sparkles } from "lucide-react";
+import { Headphones, ChevronDown } from "lucide-react";
 import { useLang } from "@/contexts/LanguageContext";
-
-const ArabicPattern = () => (
-  <svg
-    className="absolute inset-0 w-full h-full opacity-[0.03]"
-    viewBox="0 0 800 600"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <defs>
-      <pattern
-        id="geo"
-        x="0"
-        y="0"
-        width="80"
-        height="80"
-        patternUnits="userSpaceOnUse"
-      >
-        <path
-          d="M40 0 L80 20 L80 60 L40 80 L0 60 L0 20 Z"
-          fill="none"
-          stroke="#10b981"
-          strokeWidth="0.5"
-        />
-        <circle cx="40" cy="40" r="15" fill="none" stroke="#10b981" strokeWidth="0.5" />
-        <path d="M40 25 L55 40 L40 55 L25 40 Z" fill="none" stroke="#10b981" strokeWidth="0.5" />
-      </pattern>
-    </defs>
-    <rect width="100%" height="100%" fill="url(#geo)" />
-  </svg>
-);
 
 export default function HeroSection() {
   const { lang, t } = useLang();
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#0a0f0e]">
-      {/* Background layers */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0a1a14] via-[#0a0f0e] to-[#0d1117]" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] bg-emerald-900/20 rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 right-0 w-[500px] h-[400px] bg-yellow-900/10 rounded-full blur-[100px]" />
-        <ArabicPattern />
-      </div>
+    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0b2218] via-[#0d1f18] to-[#071510]" />
 
-      {/* Floating particles */}
-      <motion.div
-        animate={{ y: [0, -20, 0], opacity: [0.3, 0.6, 0.3] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-1/4 left-1/4 w-3 h-3 rounded-full bg-emerald-400"
-      />
-      <motion.div
-        animate={{ y: [0, 15, 0], opacity: [0.2, 0.5, 0.2] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        className="absolute top-1/3 right-1/4 w-2 h-2 rounded-full bg-yellow-400"
-      />
-      <motion.div
-        animate={{ y: [0, -12, 0], opacity: [0.15, 0.4, 0.15] }}
-        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 4 }}
-        className="absolute bottom-1/3 left-1/3 w-4 h-4 rounded-full bg-emerald-500/50"
-      />
+      {/* Glows */}
+      <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-emerald-700/20 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-0 right-[-5%] w-[400px] h-[400px] bg-yellow-600/10 rounded-full blur-[100px] pointer-events-none" />
 
-      {/* Main content */}
-      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+      {/* Floating dots */}
+      {[
+        { top: "22%", left: "18%", size: 3, delay: 0 },
+        { top: "35%", right: "22%", size: 2, delay: 2 },
+        { top: "65%", left: "30%", size: 4, delay: 4 },
+        { top: "70%", right: "15%", size: 2, delay: 1 },
+      ].map((dot, i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-full bg-emerald-400"
+          style={{
+            top: dot.top,
+            left: (dot as { top: string; left?: string; right?: string; size: number; delay: number }).left,
+            right: (dot as { top: string; left?: string; right?: string; size: number; delay: number }).right,
+            width: dot.size,
+            height: dot.size,
+          }}
+          animate={{ y: [0, -14, 0], opacity: [0.2, 0.7, 0.2] }}
+          transition={{ duration: 5 + i, repeat: Infinity, delay: dot.delay }}
+        />
+      ))}
+
+      {/* Content */}
+      <div className="relative z-10 text-center px-6 max-w-5xl mx-auto w-full">
+
         {/* Event badge */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="inline-flex items-center gap-2 bg-emerald-900/40 border border-emerald-700/50 rounded-full px-4 py-2 mb-8"
+          className="inline-flex items-center gap-2 bg-white/5 border border-emerald-500/30 backdrop-blur-sm rounded-full px-5 py-2 mb-10"
         >
-          <Sparkles className="w-4 h-4 text-emerald-400" />
-          <span className="text-emerald-300 text-sm font-medium">
-            {t(
-              "Journée Portes Ouvertes · 13 Juin 2026",
-              "Open House Day · June 13, 2026"
-            )}
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="text-emerald-300 text-sm font-medium tracking-wide">
+            {t("Journée Portes Ouvertes · CIO · 13 Juin 2026", "Open House Day · CIO · June 13, 2026")}
           </span>
         </motion.div>
 
         {/* Arabic Bismillah */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
+        <motion.p
+          initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-5xl md:text-7xl text-yellow-400/80 mb-8 leading-relaxed font-arabic"
+          transition={{ duration: 1, delay: 0.2 }}
+          className="font-arabic text-5xl md:text-7xl text-yellow-300/90 mb-8 leading-loose"
         >
           بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
-        </motion.div>
+        </motion.p>
 
-        {/* Main title */}
+        {/* Main heading */}
         <motion.h1
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight"
+          className="text-5xl md:text-7xl font-extrabold text-white leading-tight mb-6 tracking-tight"
         >
           {lang === "fr" ? (
-            <>
-              Découvrez la{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">
+            <>Découvrez la{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-emerald-400 to-teal-400">
                 beauté
-              </span>{" "}
-              du Coran
-            </>
+              </span>{" "}du Coran</>
           ) : (
-            <>
-              Discover the{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">
+            <>Discover the{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-emerald-400 to-teal-400">
                 beauty
-              </span>{" "}
-              of the Quran
-            </>
+              </span>{" "}of the Quran</>
           )}
         </motion.h1>
 
         {/* Subtitle */}
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="text-white/60 text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed"
+          transition={{ duration: 0.8, delay: 0.55 }}
+          className="text-white/55 text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed"
         >
           {t(
-            "Une expérience d'écoute immersive pour découvrir les versets du Coran dans une ambiance sereine et accueillante.",
-            "An immersive listening experience to discover the verses of the Quran in a serene and welcoming atmosphere."
+            "Mettez un casque, choisissez une récitation et laissez-vous porter par la parole divine. Notre équipe est là pour répondre à toutes vos questions.",
+            "Put on headphones, choose a recitation, and let yourself be carried by the divine word. Our team is here to answer all your questions."
           )}
         </motion.p>
 
         {/* CTAs */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
+          transition={{ duration: 0.8, delay: 0.7 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
           <Link href="/videos">
             <motion.button
-              whileHover={{
-                scale: 1.05,
-                boxShadow: "0 0 40px rgba(16,185,129,0.4)",
-              }}
-              whileTap={{ scale: 0.98 }}
-              className="group flex items-center gap-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-semibold text-lg px-8 py-4 rounded-2xl transition-all duration-300 shadow-xl shadow-emerald-900/40"
+              whileHover={{ scale: 1.04, boxShadow: "0 0 50px rgba(52,211,153,0.35)" }}
+              whileTap={{ scale: 0.97 }}
+              className="flex items-center gap-3 bg-emerald-500 hover:bg-emerald-400 text-white font-semibold text-lg px-10 py-4 rounded-2xl shadow-2xl shadow-emerald-900/50 transition-colors duration-200"
             >
-              <Headphones className="w-6 h-6 group-hover:animate-pulse" />
+              <Headphones className="w-6 h-6" />
               {t("Commencer l'écoute", "Start Listening")}
             </motion.button>
           </Link>
-          <motion.a
+          <a
             href="#concept"
-            whileHover={{ scale: 1.03 }}
-            className="text-white/60 hover:text-white text-base flex items-center gap-2 transition-colors"
+            className="flex items-center gap-2 text-white/50 hover:text-white/80 text-base transition-colors"
           >
-            {t("En savoir plus", "Learn more")}
+            {t("Découvrir le concept", "Discover the concept")}
             <ChevronDown className="w-4 h-4" />
-          </motion.a>
+          </a>
+        </motion.div>
+
+        {/* Stats row */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.1 }}
+          className="mt-20 flex items-center justify-center gap-12"
+        >
+          {[
+            { num: "5", labelFr: "Récitations", labelEn: "Recitations" },
+            { num: "2", labelFr: "Langues", labelEn: "Languages" },
+            { num: "∞", labelFr: "Questions bienvenues", labelEn: "Questions welcome" },
+          ].map((stat, i) => (
+            <div key={i} className="text-center">
+              <div className="text-3xl font-bold text-emerald-400">{stat.num}</div>
+              <div className="text-white/30 text-xs mt-1 uppercase tracking-widest">
+                {t(stat.labelFr, stat.labelEn)}
+              </div>
+            </div>
+          ))}
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll cue */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        animate={{ y: [0, 6, 0] }}
+        transition={{ duration: 2.5, repeat: Infinity }}
       >
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="flex flex-col items-center gap-2"
-        >
-          <div className="w-[1px] h-12 bg-gradient-to-b from-transparent via-emerald-400/50 to-transparent" />
-          <ChevronDown className="w-4 h-4 text-emerald-400/50" />
-        </motion.div>
+        <ChevronDown className="w-5 h-5 text-emerald-500/50" />
       </motion.div>
     </section>
   );
